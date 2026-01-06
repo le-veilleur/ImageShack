@@ -10,7 +10,7 @@ import { authContext } from "../Context/authContext";
 const Connection = () => {
   const Navigate = useNavigate();
 
-  const { auth, setAuth } = useContext(authContext);
+  const { setAuth } = useContext(authContext);
   const schema = Yup.object().shape({
     email: Yup.string().email("email non valide").required(),
     password: Yup.string().required(),
@@ -18,7 +18,6 @@ const Connection = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
     reset,
   } = useForm({
     resolver: yupResolver(schema),
@@ -29,7 +28,7 @@ const Connection = () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: data.email, password: data.password }),
     };
-    fetch("http://127.0.0.1:3002/login", requestOptions)
+    fetch("http://127.0.0.1:8473/login", requestOptions)
       .then((response) => response.json())
       .then((data) => {
         localStorage.setItem("token", data.token);

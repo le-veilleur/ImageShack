@@ -55,7 +55,7 @@ const Photos = () => {
       body: formData
     };
     
-    fetch("http://127.0.0.1:3002/images", requestOptions)
+    fetch("http://127.0.0.1:8473/images", requestOptions)
       .then(response => {
         if (response.ok) {
           console.log("Image uploaded successfully");
@@ -71,7 +71,7 @@ const Photos = () => {
   useEffect(() => {
     if(isUploaded){
       const token = localStorage.getItem("token");
-      fetch("http://127.0.0.1:3002/images", {
+      fetch("http://127.0.0.1:8473/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`

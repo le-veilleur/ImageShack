@@ -10,7 +10,7 @@ export default function Gallery() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3002/images", {
+    fetch("http://127.0.0.1:8473/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -30,37 +30,6 @@ export default function Gallery() {
       });
   }, [token]);
 
-  const toggleImagePrivacy = (imageId) => {
-    // Envoyez une requête pour changer l'état de l'image en privé ou public
-    // Utilisez la méthode appropriée (PUT ou PATCH) pour mettre à jour l'état de l'image
-    // Mettez à jour l'état de l'image dans le tableau ImageData en conséquence
-    // Par exemple, vous pouvez utiliser une requête comme celle-ci :
-    fetch(`http://127.0.0.1:3002/images/${imageId}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ private: true }) // Modifiez la valeur de `private` selon vos besoins
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Erreur lors de la requête");
-        }
-        return response.json();
-      })
-      .then(data => {
-        // Mettez à jour l'état de l'image dans le tableau ImageData
-        const updatedImageData = ImageData.map(image =>
-          image.id === imageId ? { ...image, private: true } : image
-        );
-        setImageData(updatedImageData);
-      })
-      .catch(error => {
-        console.error("Erreur:", error);
-      });
-  };
-
   return (
     
     <div>
@@ -76,8 +45,8 @@ export default function Gallery() {
             ) : null}
             <img
               className="imagehome"
-              src={"http://127.0.0.1:3002/" + image.name}
-              alt={"http://127.0.0.1:3002/" + image.url}
+              src={"http://127.0.0.1:8473/" + image.name}
+              alt={"http://127.0.0.1:8473/" + image.url}
             />
             {/* Affiche un bouton pour changer la confidentialité de l'image */}
            

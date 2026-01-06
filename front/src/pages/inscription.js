@@ -42,7 +42,7 @@ const Inscription = () => {
         }),
       };
 
-      const response = await fetch("http://127.0.0.1:3002/account", requestOptions);
+      const response = await fetch("http://127.0.0.1:8473/account", requestOptions);
       
       let result;
       const contentType = response.headers.get("content-type");
@@ -72,7 +72,7 @@ const Inscription = () => {
     } catch (error) {
       console.error("Erreur:", error);
       if (error.name === "TypeError" && error.message.includes("Failed to fetch")) {
-        setErrorMessage("Impossible de se connecter au serveur. Vérifiez que le backend est démarré sur le port 3002.");
+        setErrorMessage("Impossible de se connecter au serveur. Vérifiez que le backend est démarré sur le port 8473.");
       } else {
         setErrorMessage("Erreur de connexion au serveur. Veuillez réessayer.");
       }

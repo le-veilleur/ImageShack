@@ -13,7 +13,7 @@ import cors from 'cors';
 import { readFileSync } from 'fs';
 
 const app = express();
-const PORT = process.env.PORT || 3002;
+const PORT = process.env.PORT || 8473;
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
@@ -231,7 +231,7 @@ app.delete("/account", async (request, reply) => {
 });
 
 //send image
-// url image http://localhost:3000/uploads/1683917463744-ff.JPG
+// url image http://localhost:8473/uploads/1683917463744-ff.JPG
 app.post("/images", imgUpload, async (request, reply) => {
   const authHeader = request.headers.authorization;
   const token = authHeader.slice(7);

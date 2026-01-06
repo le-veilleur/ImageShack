@@ -11,7 +11,7 @@ export default function ImageCompte() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3002/imagesUser", {
+    fetch("http://127.0.0.1:8473/imagesUser", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -38,7 +38,7 @@ export default function ImageCompte() {
       .catch(error => {
         console.error("Erreur:", error);
       });
-  }, []);
+  }, [token]);
 
   const toggleImagePrivacy = id => {
     const imageToUpdate = ImageData.find(image => image.id === id);
@@ -49,7 +49,7 @@ export default function ImageCompte() {
       private: !isPrivate
     };
 
-    fetch("http://127.0.0.1:3002/images/" + id, {
+    fetch("http://127.0.0.1:8473/images/" + id, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function ImageCompte() {
   };
 
   const deleteImage = id => {
-    fetch("http://127.0.0.1:3002/deleteImage/" + id, {
+    fetch("http://127.0.0.1:8473/deleteImage/" + id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -90,8 +90,8 @@ export default function ImageCompte() {
   };
 
   return (
-    <div>
-      <ImageList className="ImageList" sx={{ width: "450px", height: "auto" }} cols={1}>
+    <div className="image-compte-container">
+      <ImageList className="ImageList ImageList-compte" sx={{ width: "100%", height: "auto" }} cols={1}>
         {ImageData && ImageData.map((image, index) => {
           
           let monthactive; 
@@ -103,55 +103,56 @@ export default function ImageCompte() {
           previousdate = new Date(ImageData[index - 1].date)
           previousmonth = previousdate.toLocaleString("default", {month: 'long'})
         }
-        if(previousdate && imagedate && previousmonth == imagemonth){
+        if(previousdate && imagedate && previousmonth === imagemonth){
           monthactive = false
         } else {
           
           monthactive = true
         }
           return (
-            <div>
-          <ImageListItem key={index} onClick={() => Navigate(`/image/${image.url}`, { state: image })}>
-            {monthactive && (
-              <h2>{new Date(image.date).toLocaleString("default", {
-                month: "long",
-              })}</h2>
-            )}
-            {/* Affiche un indicateur "Privé" si l'image est privée */}
-            {image.private ? (
-              <span className="private-indicator">Privée</span>
-            ) : 
-            <span className="private-indicator">Public</span>}
-            <p>
-                        
-                        {new Date(image.date).toLocaleString("default", {
-                          day: "numeric",
-                          month: "long",
-                          hour: "numeric",
-                          minute: "numeric",
-                        })}
-                      </p>
-            <img
-              className="imagehome"
-              src={"http://127.0.0.1:3002/" + image.name}
-              alt={"http://127.0.0.1:3002/" + image.url}
-            />
- 
-          </ImageListItem>
-           {/* Affiche un bouton pour changer la confidentialité de l'image */}
-          <Button
-              variant="contained"
-              onClick={() => toggleImagePrivacy(image.id)}
-            >
-              Changer la confidentialité
-            </Button>
-            <button
-              onClick={() => deleteImage(image.id)}
-              className="delete-image-buttonCompte"
-            >
-              Supprimer une image
-            </button>
-          </div>
+            <div key={image.id} className={`image-item-wrapper ${monthactive ? 'with-month-header' : ''}`}>
+              {monthactive && (
+                <h2 className="month-header">{new Date(image.date).toLocaleString("default", {
+                  month: "long",
+                })}</h2>
+              )}
+              <ImageListItem onClick={() => Navigate(`/image/${image.url}`, { state: image })}>
+                {/* Affiche un indicateur "Privé" si l'image est privée */}
+                {image.private ? (
+                  <span className="private-indicator">Privée</span>
+                ) : 
+                <span className="private-indicator public-indicator">Public</span>}
+                <p className="image-date">
+                  {new Date(image.date).toLocaleString("default", {
+                    day: "numeric",
+                    month: "long",
+                    hour: "numeric",
+                    minute: "numeric",
+                  })}
+                </p>
+                <img
+                  className="imagehome"
+                  src={"http://127.0.0.1:8473/" + image.name}
+                  alt={"http://127.0.0.1:8473/" + image.url}
+                />
+              </ImageListItem>
+              {/* Affiche un bouton pour changer la confidentialité de l'image */}
+              <div className="image-actions">
+                <Button
+                  variant="contained"
+                  onClick={() => toggleImagePrivacy(image.id)}
+                  className="privacy-button"
+                >
+                  Changer la confidentialité
+                </Button>
+                <button
+                  onClick={() => deleteImage(image.id)}
+                  className="delete-image-buttonCompte"
+                >
+                  Supprimer une image
+                </button>
+              </div>
+            </div>
         )})}
       </ImageList>
     </div>

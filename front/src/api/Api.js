@@ -1,6 +1,6 @@
 export const uploadImage = formData => {
   // Envoyer une requête POST à l'API backend avec les données du fichier
-  fetch("http://127.0.0.1:3000/images", {
+  fetch("http://127.0.0.1:8473/images", {
     method: "POST",
     body: formData // Inclure l'objet FormData dans le corps de la requête
   })

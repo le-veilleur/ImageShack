@@ -8,7 +8,7 @@ function Image() {
     const token = localStorage.getItem("token")
     
     useEffect(() => {
-      fetch(`http://127.0.0.1:3002/image/${ImageSlug}`, {
+      fetch(`http://127.0.0.1:8473/image/${ImageSlug}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -32,7 +32,7 @@ function Image() {
     return ( <>
     <div className="image-container">
         {image && (
-            <img className="image" src={"http://127.0.0.1:3002/" + image.name}/>
+            <img className="image" src={"http://127.0.0.1:8473/" + image.name} alt={image.url || "Image"} />
         )}
     </div>
     

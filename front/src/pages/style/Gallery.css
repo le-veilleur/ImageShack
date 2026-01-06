@@ -1,24 +1,28 @@
 /* Gallery.css */
 
 .ImageList {
-  gap: 20px !important;
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem !important;
   padding: 2rem;
   margin: 0 auto;
   max-width: 1400px;
+  width: 100%;
 }
 
 .imagehome {
   width: 100%;
-  height: 100%;
+  height: 280px;
   object-fit: cover;
   border-radius: 12px;
   transition: all 0.3s ease;
   cursor: pointer;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: block;
 }
 
 .imagehome:hover {
-  transform: scale(1.05);
+  transform: scale(1.03);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
   z-index: 10;
 }
@@ -43,30 +47,72 @@
   overflow: hidden;
   border-radius: 12px;
   transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .MuiImageListItem-root:hover {
   transform: translateY(-5px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles spécifiques pour ImageCompte */
+.ImageList-compte {
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)) !important;
+}
+
+.ImageList-compte .imagehome {
+  height: auto;
+  max-height: 400px;
+  width: 100%;
+}
+
+.ImageList-compte .MuiImageListItem-root {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  gap: 1rem;
+  width: 100%;
 }
 
 /* Responsive */
 @media (max-width: 1024px) {
   .ImageList {
-    gap: 15px !important;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1.25rem !important;
     padding: 1.5rem;
+  }
+
+  .ImageList[cols="1"] {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   }
 }
 
 @media (max-width: 768px) {
   .ImageList {
-    gap: 10px !important;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem !important;
     padding: 1rem;
+  }
+
+  .ImageList[cols="1"] {
+    grid-template-columns: 1fr;
+  }
+
+  .imagehome {
+    height: 220px;
   }
 }
 
 @media (max-width: 480px) {
   .ImageList {
-    gap: 8px !important;
-    padding: 0.5rem;
+    grid-template-columns: 1fr;
+    gap: 1rem !important;
+    padding: 0.75rem;
+  }
+
+  .imagehome {
+    height: 250px;
   }
 }

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import ReactDOM from "react-dom/client";
 import {
   BrowserRouter,
@@ -17,7 +17,6 @@ import { authContext, AuthProvider } from "./Context/authContext";
 import Image from "./pages/Image";
 function App() {
   const { auth } = useContext(authContext);
-  const [token, setToken] = useState("");
 
   return (
     <BrowserRouter>
