@@ -11,7 +11,7 @@ export default function ImageCompte() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3001/imagesUser", {
+    fetch("http://127.0.0.1:3002/imagesUser", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -49,7 +49,7 @@ export default function ImageCompte() {
       private: !isPrivate
     };
 
-    fetch("http://127.0.0.1:3001/images/" + id, {
+    fetch("http://127.0.0.1:3002/images/" + id, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -75,7 +75,7 @@ export default function ImageCompte() {
   };
 
   const deleteImage = id => {
-    fetch("http://51.75.18.60:3001/deleteImage/" + id, {
+    fetch("http://127.0.0.1:3002/deleteImage/" + id, {
       method: "DELETE",
       headers: {
         Authorization: `Bearer ${token}`
@@ -133,8 +133,8 @@ export default function ImageCompte() {
                       </p>
             <img
               className="imagehome"
-              src={"http://127.0.0.1:3001/" + image.name}
-              alt={"http://127.0.0.1:3001/" + image.url}
+              src={"http://127.0.0.1:3002/" + image.name}
+              alt={"http://127.0.0.1:3002/" + image.url}
             />
  
           </ImageListItem>

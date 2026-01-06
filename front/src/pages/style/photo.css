@@ -1,52 +1,126 @@
 .Photo {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  padding: 2rem;
+}
+
+.dropzone {
+  width: 100%;
+  max-width: 500px;
+  min-height: 200px;
+  border: 3px dashed #667eea;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-bottom: 2rem;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  padding: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.dropzone:hover {
+  border-color: #764ba2;
+  background: rgba(102, 126, 234, 0.05);
+  transform: translateY(-5px);
+  box-shadow: 0 15px 40px rgba(102, 126, 234, 0.2);
+}
+
+.dropzone:active {
+  transform: translateY(-2px);
+}
+
+.dropzone p {
+  margin: 0;
+  color: #667eea;
+  font-size: 1.1rem;
+  font-weight: 500;
+  text-align: center;
+}
+
+aside {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  justify-content: center;
+  max-width: 600px;
+}
+
+aside > div {
+  margin: 0;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+aside > div:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+aside img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.upload-btn {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  min-width: 200px;
+}
+
+.upload-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.upload-btn:active {
+  transform: translateY(0);
+}
+
+.Photo p {
+  color: white;
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+}
+
+@media (max-width: 768px) {
   .dropzone {
-    width: 300px;
-    height: 150px;
-    border: 2px dashed #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    margin-bottom: 20px;
+    min-height: 150px;
+    padding: 1.5rem;
   }
   
   .dropzone p {
-    margin: 0;
+    font-size: 0.9rem;
   }
   
-  aside {
-    display: flex;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
-  }
-  
-  aside > div {
-    margin-right: 10px;
-    margin-bottom: 10px;
-  }
-  
-  img {
+  aside img {
     width: 150px;
     height: 150px;
-    object-fit: cover;
   }
-  
-  .upload-btn {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .upload-btn:hover {
-    background-color: #0069d9;
-  }
-  
+}
+
   

@@ -1,7 +1,6 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
 import {
-  redirect,
   BrowserRouter,
   Routes,
   Route,

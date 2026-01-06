@@ -1,44 +1,88 @@
 /* Layout.css */
 
 nav {
-    background-color: #f2f2f2;
-    padding: 10px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 1rem 2rem;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.menu li {
+  margin: 0;
+}
+
+.menu li a {
+  text-decoration: none;
+  color: #667eea;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  display: inline-block;
+  position: relative;
+}
+
+.menu li a:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.menu li a:active {
+  transform: translateY(0);
+}
+
+.menu li button {
+  border: none;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+}
+
+.menu li button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+}
+
+.menu li button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  nav {
+    padding: 1rem;
   }
   
   .menu {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
+    flex-direction: column;
+    align-items: stretch;
   }
   
-  .menu li {
-    margin-right: 10px;
-  }
-  
-  .menu li:last-child {
-    margin-right: 0;
-  }
-  
-  .menu li a {
-    text-decoration: none;
-    color: #333;
-    padding: 5px;
-  }
-  
-  .menu li a:hover {
-    background-color: #ddd;
-  }
-  
+  .menu li a,
   .menu li button {
-    border: none;
-    background-color: transparent;
-    color: #333;
-    padding: 5px;
-    cursor: pointer;
+    width: 100%;
+    text-align: center;
   }
-  
-  .menu li button:hover {
-    background-color: #ddd;
-  }
-  
+}

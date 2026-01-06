@@ -15,7 +15,7 @@ const DeleteAccount = ({ userId }) => {
     const token = localStorage.getItem('token');
 
     // Effectuer la requête de suppression sans axios
-    fetch('http://127.0.0.1:3001/account', {
+    fetch('http://127.0.0.1:3002/account', {
       method: 'DELETE',
       headers: {
         'Authorization': `Bearer ${token}`

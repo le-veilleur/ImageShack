@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react'
-import {useLocation} from 'react-router-dom';
 import './style/Image.css';
 
 function Image() {
-    
     const [image, setImage] = useState(null)
-    console.log("mon image",image?.name)
     const path = window.location.pathname;
     const ImageSlug = path.split("/")[2];
     const token = localStorage.getItem("token")
+    
     useEffect(() => {
-    fetch(`http://127.0.0.1:3001/image/${ImageSlug}`, {
+      fetch(`http://127.0.0.1:3002/image/${ImageSlug}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -28,13 +26,13 @@ function Image() {
       .catch((error) => {
         console.error("Error:", error);
       });
-    }, [])
+    }, [ImageSlug, token])
     
      
     return ( <>
     <div className="image-container">
         {image && (
-            <img className="image" src={"http://127.0.0.1:3001/" + image.name}/>
+            <img className="image" src={"http://127.0.0.1:3002/" + image.name}/>
         )}
     </div>
     

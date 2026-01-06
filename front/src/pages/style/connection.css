@@ -1,39 +1,90 @@
 .Connection {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  padding: 2rem;
+}
+
+.Connection form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 3rem;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  width: 100%;
+  max-width: 400px;
+  gap: 1.5rem;
+}
+
+.Connection h2 {
+  margin: 0 0 1rem 0;
+  color: #667eea;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.Connection input {
+  padding: 1rem 1.5rem;
+  width: 100%;
+  border: 2px solid #e0e0e0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+  color: #333;
+}
+
+.Connection input:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.Connection input::placeholder {
+  color: #999;
+}
+
+.Connection button {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  width: 100%;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  margin-top: 0.5rem;
+}
+
+.Connection button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.Connection button:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
   .Connection form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+    padding: 2rem 1.5rem;
   }
   
   .Connection h2 {
-    margin-bottom: 20px;
+    font-size: 1.5rem;
   }
-  
-  .Connection input {
-    padding: 10px;
-    margin-bottom: 10px;
-    width: 300px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-  }
-  
-  .Connection button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .Connection button:hover {
-    background-color: #0069d9;
-  }
-  
+}

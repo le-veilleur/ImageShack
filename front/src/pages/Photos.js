@@ -27,10 +27,19 @@ const Photos = () => {
     </div>
   );
 
-  const [imageSent, setImageSent] = useState([]);
+  // Nettoyer les URLs d'objets lors du démontage
+  useEffect(() => {
+    return () => {
+      files.forEach(file => {
+        if (file.preview) {
+          URL.revokeObjectURL(file.preview);
+        }
+      });
+    };
+  }, [files]);
+
   const handleFile = e => {
-    console.log(e);
-    setImageSent(e.target.files[0]);
+    // Handler pour le changement de fichier
   };
   
   const uploadFiles = () => {
@@ -46,7 +55,7 @@ const Photos = () => {
       body: formData
     };
     
-    fetch("http://127.0.0.1:3001/images", requestOptions)
+    fetch("http://127.0.0.1:3002/images", requestOptions)
       .then(response => {
         if (response.ok) {
           console.log("Image uploaded successfully");
@@ -62,7 +71,7 @@ const Photos = () => {
   useEffect(() => {
     if(isUploaded){
       const token = localStorage.getItem("token");
-      fetch("http://127.0.0.1:3001/images", {
+      fetch("http://127.0.0.1:3002/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -111,6 +120,6 @@ const Photos = () => {
       </>)}
     </div>
   );
-};
+}
 
 export default Photos;

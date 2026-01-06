@@ -1,5 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +7,8 @@ import "./style/connection.css"
 
 import { authContext } from "../Context/authContext";
 
-const Connection = ({ token, setToken }) => {
+const Connection = () => {
   const Navigate = useNavigate();
-
-  useEffect(() => {
-    console.log("hello");
-  }, []);
 
   const { auth, setAuth } = useContext(authContext);
   const schema = Yup.object().shape({
@@ -33,16 +29,14 @@ const Connection = ({ token, setToken }) => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email: data.email, password: data.password }),
     };
-    fetch("http://127.0.0.1:3001/login", requestOptions)
+    fetch("http://127.0.0.1:3002/login", requestOptions)
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         localStorage.setItem("token", data.token);
         setAuth(data.token);
         Navigate("/");
-
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.error("Erreur de connexion:", e));
     reset();
   };
   return (

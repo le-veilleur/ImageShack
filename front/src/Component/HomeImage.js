@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
-import Button from "@mui/material/Button";
-import "../pages/style/Gallery.css"; // Assurez-vous d'importer le fichier CSS approprié
+import "../pages/style/Gallery.css";
 import { useNavigate } from "react-router-dom";
 
 export default function Gallery() {
@@ -11,7 +10,7 @@ export default function Gallery() {
   const Navigate = useNavigate();
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3001/images", {
+    fetch("http://127.0.0.1:3002/images", {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`
@@ -24,20 +23,19 @@ export default function Gallery() {
         return response.json();
       })
       .then(data => {
-        console.log("la liste des fichiers", data);
         setImageData(data);
       })
       .catch(error => {
         console.error("Erreur:", error);
       });
-  }, []);
+  }, [token]);
 
   const toggleImagePrivacy = (imageId) => {
     // Envoyez une requête pour changer l'état de l'image en privé ou public
     // Utilisez la méthode appropriée (PUT ou PATCH) pour mettre à jour l'état de l'image
     // Mettez à jour l'état de l'image dans le tableau ImageData en conséquence
     // Par exemple, vous pouvez utiliser une requête comme celle-ci :
-    fetch(`http://127.0.0.1:3001/images/${imageId}`, {
+    fetch(`http://127.0.0.1:3002/images/${imageId}`, {
       method: "PUT",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -63,8 +61,6 @@ export default function Gallery() {
       });
   };
 
-  console.log(ImageData);
-
   return (
     
     <div>
@@ -80,8 +76,8 @@ export default function Gallery() {
             ) : null}
             <img
               className="imagehome"
-              src={"http://127.0.0.1:3001/" + image.name}
-              alt={"http://127.0.0.1:3001/" + image.url}
+              src={"http://127.0.0.1:3002/" + image.name}
+              alt={"http://127.0.0.1:3002/" + image.url}
             />
             {/* Affiche un bouton pour changer la confidentialité de l'image */}
            

@@ -1,54 +1,113 @@
 /* Pour le conteneur principal */
 .DeleteAccount {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 100px);
+  padding: 2rem;
+  gap: 2rem;
+}
+
+/* Pour le message de suppression */
+.DeleteAccount p {
+  margin: 0;
+  color: white;
+  font-size: 1.2rem;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 1.5rem 2.5rem;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  max-width: 500px;
+}
+
+/* Pour le bouton de suppression */
+.DeleteAccount button {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.4);
+  min-width: 200px;
+}
+
+.DeleteAccount button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.5);
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+}
+
+.DeleteAccount button:active {
+  transform: translateY(0);
+}
+
+/* Pour le bouton de déconnexion */
+.DeleteAccount li {
+  list-style: none;
+  margin: 0;
+}
+
+.DeleteAccount li button {
+  padding: 1rem 2.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  margin-top: 1rem;
+  min-width: 200px;
+}
+
+.DeleteAccount li button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+}
+
+.DeleteAccount li button:active {
+  transform: translateY(0);
+}
+
+.delete-image-buttonCompte {
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(245, 87, 108, 0.3);
+}
+
+.delete-image-buttonCompte:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 87, 108, 0.4);
+  background: linear-gradient(135deg, #f5576c 0%, #f093fb 100%);
+}
+
+.delete-image-buttonCompte:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .DeleteAccount {
+    padding: 1rem;
   }
   
-  /* Pour le message de suppression */
   .DeleteAccount p {
-    margin-bottom: 20px;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
   }
-  
-  /* Pour le bouton de suppression */
-  .DeleteAccount button {
-    padding: 10px 20px;
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .DeleteAccount button:hover {
-    background-color: #c82333;
-  }
-  
-  /* Pour le bouton de déconnexion */
-  .DeleteAccount li button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .DeleteAccount li button:hover {
-    background-color: #0069d9;
-  }
-  
-  .delete-image-buttonCompte {
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-  }
-  
-  .delete-image-buttonCompte:hover {
-    background-color: darkred;
-  }
-  
+}

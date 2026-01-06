@@ -9,19 +9,21 @@ import { imageDto } from "./models/imageDto.js";
 import { generateRandomString } from "./functions/url.js";
 import { imgUpload } from "./functions/images.js";
 import fs from "fs";
-import cors from 'cors'
+import cors from 'cors';
+import { readFileSync } from 'fs';
 
 const app = express();
-const PORT = process.env.PORT || 3001;
+const PORT = process.env.PORT || 3002;
 
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 app.use(
   cors({
-    origin: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Authorization", "Content-Type"],
+    origin: true, // Autorise toutes les origines en développement
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Authorization", "Content-Type", "X-Requested-With"],
   })
 );
 
@@ -30,22 +32,104 @@ const Account = model("Account", AccountDto);
 const ImageUser = model("imageUser", imageDto);
 
 // Connect to the MongoDB database
+// Pour WSL : utiliser l'IP de l'hôte Windows ou localhost si MongoDB est dans WSL
+// Option 1: MongoDB sur Windows - utiliser l'IP de l'hôte Windows
+//   - Trouvez l'IP avec: cat /etc/resolv.conf | grep nameserver
+//   - Ou utilisez: ip route show | grep default
+// Option 2: MongoDB dans WSL - utiliser 127.0.0.1
+// Option 3: MongoDB Atlas (cloud) - utiliser la chaîne de connexion complète
+
+// Détection automatique de l'IP Windows depuis WSL
+function getWindowsHostIP() {
+  try {
+    // Méthode 1: Via /etc/resolv.conf (généralement fiable)
+    const resolv = readFileSync('/etc/resolv.conf', 'utf8');
+    const match = resolv.match(/nameserver\s+(\S+)/);
+    if (match && match[1]) {
+      return match[1];
+    }
+  } catch (e) {
+    // Ignorer les erreurs si le fichier n'existe pas
+  }
+  return null;
+}
+
+const WINDOWS_HOST_IP = getWindowsHostIP();
+// Par défaut, utiliser l'IP de Windows si détectée, sinon 127.0.0.1
+// Depuis WSL, 127.0.0.1 ne fonctionne pas pour accéder à MongoDB sur Windows
+const MONGODB_HOST = process.env.MONGODB_HOST || WINDOWS_HOST_IP || "127.0.0.1";
+const MONGODB_URI = process.env.MONGODB_URI || `mongodb://${MONGODB_HOST}:27017/account-projet4-express`;
+
+console.log(`Tentative de connexion à MongoDB: ${MONGODB_URI}`);
+if (WINDOWS_HOST_IP) {
+  console.log(`IP de l'hôte Windows détectée: ${WINDOWS_HOST_IP}`);
+  console.log(`MongoDB Compass utilise: mongodb://127.0.0.1:27017/account-projet4-express`);
+  console.log(`Depuis WSL, nous utilisons: mongodb://${WINDOWS_HOST_IP}:27017/account-projet4-express`);
+  console.log(`Si la connexion échoue, MongoDB sur Windows doit accepter les connexions depuis WSL`);
+}
+
 mongoose
-  .connect("mongodb://127.0.0.1:27017/account-projet4-express")
-  .then(() => console.log("Connected to MongoDB database"))
-  .catch((error) =>
-    console.log("Error connecting to MongoDB database: ", error)
-  );
+  .connect(MONGODB_URI, {
+    serverSelectionTimeoutMS: 10000, // Timeout après 10 secondes
+    socketTimeoutMS: 45000,
+  })
+  .then(() => {
+    console.log("Connected to MongoDB database");
+    console.log("MongoDB connection state:", mongoose.connection.readyState);
+  })
+  .catch((error) => {
+    console.error("Error connecting to MongoDB database:", error);
+    console.error("Vérifiez que MongoDB est démarré:");
+    console.error("   - sudo systemctl start mongod");
+    console.error("   - ou: mongod --dbpath /path/to/data");
+    process.exit(1); // Arrêter le serveur si MongoDB n'est pas disponible
+  });
+
+// Gérer les événements de connexion
+mongoose.connection.on('error', (err) => {
+  console.error('MongoDB connection error:', err);
+});
+
+mongoose.connection.on('disconnected', () => {
+  console.warn('MongoDB disconnected');
+});
+
+mongoose.connection.on('reconnected', () => {
+  console.log('MongoDB reconnected');
+});
 
 // Create a new account
 app.post("/account", async (request, response) => {
   try {
+    // Vérifier la connexion MongoDB
+    if (mongoose.connection.readyState !== 1) {
+      console.error("MongoDB n'est pas connecté. État:", mongoose.connection.readyState);
+      return response.status(503).json({ 
+        error: "Service temporairement indisponible. Base de données non connectée." 
+      });
+    }
+
     const { email, password } = request.body;
+
+    // Validation des données
+    if (!email || !password) {
+      return response.status(400).json({ 
+        error: "L'email et le mot de passe sont requis" 
+      });
+    }
+
+    if (password.length < 6) {
+      return response.status(400).json({ 
+        error: "Le mot de passe doit contenir au moins 6 caractères" 
+      });
+    }
 
     const existAccount = await Account.find({ email: email });
 
     if (existAccount.length > 0) {
-      response.status(403).send("Compte déjà créé");
+      return response.status(403).json({ 
+        error: "Compte déjà créé" 
+      });
     } else {
       const salt = await genSalt(10);
       const hashedPassword = await hash(password, salt);
@@ -53,13 +137,17 @@ app.post("/account", async (request, response) => {
       const account = new Account({ email, password: hashedPassword });
       await account.save();
 
-      response.status(201).send("Compte créé");
+      return response.status(201).json({ 
+        message: "Compte créé avec succès" 
+      });
     }
   } catch (error) {
-    console.log(error);
-    response
-      .status(500)
-      .send("Une erreur est survenue lors de la création du compte");
+    console.error("Erreur lors de la création du compte:", error);
+    console.error("Stack trace:", error.stack);
+    return response.status(500).json({ 
+      error: "Une erreur est survenue lors de la création du compte",
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
   }
 });
 
@@ -189,7 +277,7 @@ app.delete("/deleteImage/:imageId", async (request, reply) => {
   const authHeader = request.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return reply.status(403).status("Authentification invalide");
+    return reply.status(403).send("Authentification invalide");
   }
 
   const token = authHeader.slice(7);
@@ -372,7 +460,7 @@ app.get("/verify-token", async (request, reply) => {
 
 // Start the Express server
 app.listen(PORT, () => {
-  console.log("Server listening on port 3000");
+  console.log(`Server listening on port ${PORT}`);
 });
 
 // get slug
@@ -381,28 +469,40 @@ app.get("/image/:slug", async (request, reply) => {
     const slug = request.params.slug;
     const image = await ImageUser.findOne({ url: slug });
 
-      const authHeader = request.headers.authorization;
+    if (!image) {
+      return reply.status(404).json({ error: "Image non trouvée" });
+    }
 
-      if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        return reply.status(403).send({ response: "connexion refusée" });
-      }
+    // Si l'image est publique, on peut la retourner sans authentification
+    if (image.isPublic) {
+      return reply.status(200).json({
+        date: image.date,
+        isPublic: image.isPublic,
+        name: image.name,
+        url: image.url,
+        userId: image.userId,
+        id: image.id,
+      });
+    }
 
+    // Si l'image est privée, on vérifie l'authentification
+    const authHeader = request.headers.authorization;
+
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+      return reply.status(403).json({ error: "Authentification requise pour cette image privée" });
+    }
+
+    try {
       const token = authHeader.slice(7);
-
       const decodedToken = jwt.verify(
         token,
         "16UQLq1HZ3CNwhvgrarV6pMoA2CDjb4tyF"
       );
+      const userId = decodedToken.userId;
 
-    const userId = decodedToken.userId;
-    
-    console.log(userId);
-
-
-
-    if (image) {
-      if (image.isPublic || (userId && userId == image.userId)) {
-        reply.status(200).send({
+      // Vérifier que l'utilisateur est le propriétaire de l'image
+      if (userId && userId.toString() === image.userId.toString()) {
+        return reply.status(200).json({
           date: image.date,
           isPublic: image.isPublic,
           name: image.name,
@@ -411,13 +511,13 @@ app.get("/image/:slug", async (request, reply) => {
           id: image.id,
         });
       } else {
-        reply.status(403).send({ response: "rrrr" });
+        return reply.status(403).json({ error: "Vous n'êtes pas autorisé à accéder à cette image" });
       }
-    } else {
-      reply.status(403).send({ response: "interdit" });
+    } catch (tokenError) {
+      return reply.status(401).json({ error: "Token invalide" });
     }
   } catch (error) {
-    console.log(error);
-    reply.status(500).send({ response: "Erreur serveur" });
+    console.error("Erreur lors de la récupération de l'image:", error);
+    return reply.status(500).json({ error: "Erreur serveur" });
   }
 });

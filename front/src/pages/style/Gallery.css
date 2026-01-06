@@ -1,26 +1,72 @@
 /* Gallery.css */
 
+.ImageList {
+  gap: 20px !important;
+  padding: 2rem;
+  margin: 0 auto;
+  max-width: 1400px;
+}
+
 .imagehome {
-    width: 100%;
-    height: auto;
-    object-fit: cover;
-  }
-  
-  /* Si vous souhaitez ajouter de l'espace entre les images */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.imagehome:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+  z-index: 10;
+}
+
+.private-indicator {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(245, 87, 108, 0.9);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  z-index: 5;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.MuiImageListItem-root {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.MuiImageListItem-root:hover {
+  transform: translateY(-5px);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
   .ImageList {
-    gap: 10px;
+    gap: 15px !important;
+    padding: 1.5rem;
   }
-  
-  /* Si vous souhaitez modifier la taille de la grille en fonction de la taille de l'écran */
-  @media (max-width: 768px) {
-    .ImageList {
-      grid-template-columns: repeat(2, 1fr);
-    }
+}
+
+@media (max-width: 768px) {
+  .ImageList {
+    gap: 10px !important;
+    padding: 1rem;
   }
-  
-  @media (max-width: 480px) {
-    .ImageList {
-      grid-template-columns: repeat(1, 1fr);
-    }
+}
+
+@media (max-width: 480px) {
+  .ImageList {
+    gap: 8px !important;
+    padding: 0.5rem;
   }
-  
+}
